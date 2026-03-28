@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
-"""Anagram finder and checker."""
+"""Anagram checker and finder."""
 import sys
 from collections import Counter
+from itertools import permutations
+
 def is_anagram(a, b):
-    return Counter(a.lower().replace(" ","")) == Counter(b.lower().replace(" ",""))
+    return Counter(a.lower().replace(' ','')) == Counter(b.lower().replace(' ',''))
+
 def find_anagrams(word, wordlist):
-    key = tuple(sorted(word.lower()))
-    return [w for w in wordlist if tuple(sorted(w.lower())) == key and w.lower() != word.lower()]
-if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        a, b = sys.argv[1], sys.argv[2]
-        print(f"'{a}' and '{b}': {'ANAGRAM' if is_anagram(a, b) else 'not anagram'}")
-    elif len(sys.argv) == 2:
-        word = sys.argv[1]
-        try:
-            words = open("/usr/share/dict/words").read().split()
-        except FileNotFoundError:
-            words = ["listen","silent","evil","vile","heart","earth","least","steal","tales"]
+    target = Counter(word.lower())
+    return [w for w in wordlist if Counter(w.lower()) == target and w.lower() != word.lower()]
+
+if __name__ == '__main__':
+    if len(sys.argv) < 3: print("Usage: anagram.py check <word1> <word2>\n       anagram.py find <word> <wordlist_file>"); sys.exit(1)
+    cmd = sys.argv[1]
+    if cmd == 'check':
+        a, b = sys.argv[2], sys.argv[3]
+        print(f"'{a}' and '{b}' {'ARE' if is_anagram(a,b) else 'are NOT'} anagrams")
+    elif cmd == 'find':
+        word = sys.argv[2]
+        wfile = sys.argv[3] if len(sys.argv) > 3 else '/usr/share/dict/words'
+        words = open(wfile).read().splitlines()
         matches = find_anagrams(word, words)
-        print(f"Anagrams of '{word}': {matches[:20]}")
-    else:
-        print("Usage: anagram.py <word1> [word2]")
+        print(f"Anagrams of '{word}': {', '.join(matches[:20]) if matches else 'none found'}")
