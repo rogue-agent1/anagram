@@ -1,7 +1,14 @@
-# anagram-tool
-Anagram checker and dictionary finder. Zero dependencies.
+# anagram
+
+Anagram finder and checker
+
 ## Usage
+
 ```bash
-python3 anagram.py check "listen" "silent"
-python3 anagram.py find "listen"  # searches /usr/share/dict/words
+python3 anagram.py --help
 ```
+
+## Features
+
+- Zero dependencies (Python 3.8+)
+- Single file implementation
